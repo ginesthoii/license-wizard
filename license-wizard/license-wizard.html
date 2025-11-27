@@ -2,512 +2,1070 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Full License Wizard</title>
+<title>Advanced License Wizard — Griffin Edition (C-Mode)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-  body {
-    margin: 0;
-    font-family: system-ui, sans-serif;
-    display: flex;
-    height: 100vh;
-    overflow: hidden;
-    background: #f8f8f8;
-  }
+/* =========================================================
+   RESET + DEFAULTS
+   ========================================================= */
+*, *::before, *::after { box-sizing: border-box; }
 
-  /* SIDEBAR */
-  .sidebar {
-    width: 250px;
-    background: #1e1e1e;
-    color: #e7e7e7;
-    padding: 20px;
-    box-sizing: border-box;
-    overflow-y: auto;
-  }
-  .side-title {
-    font-size: 22px;
-    font-weight: 600;
-    margin-bottom: 25px;
-  }
-  .side-link {
-    display: block;
-    padding: 10px 8px;
-    cursor: pointer;
-    color: #ccc;
-    border-radius: 4px;
-    margin-bottom: 8px;
-    text-decoration: none;
-  }
-  .side-link:hover {
-    background: #333;
-    color: #fff;
-  }
-  .side-link.active {
-    background: #444;
-    color: #fff;
-  }
+body {
+  margin:0;
+  background:#f4f4f4;
+  color:#222;
+  font-family: system-ui, -apple-system, sans-serif;
+}
 
-  /* CONTENT AREA */
-  .content {
-    flex: 1;
-    overflow-y: auto;
-    padding: 30px 40px;
-    box-sizing: border-box;
-  }
-  h1 { margin-bottom: 10px; }
-  h2 { margin-top: 25px; }
+body.dark {
+  background:#111;
+  color:#ddd;
+}
 
-  fieldset {
-    border: 1px solid #aaa;
-    padding: 15px;
-    margin-top: 20px;
-    border-radius: 6px;
-    background: #fff;
-  }
-  legend {
-    padding: 0 8px;
-    font-weight: 600;
-  }
+/* =========================================================
+   LAYOUT
+   ========================================================= */
+#wrapper {
+  display:flex;
+  min-height:100vh;
+}
 
-  label { cursor: pointer; }
+/* Sidebar */
+#sidebar {
+  width:260px;
+  background:#222;
+  color:#eee;
+  padding:30px 0;
+  flex-shrink:0;
+  position:sticky;
+  top:0;
+  height:100vh;
+  overflow-y:auto;
+}
+body.dark #sidebar { background:#000; }
 
-  textarea {
-    width: 100%;
-    height: 320px;
-    font-family: monospace;
-    margin-top: 15px;
-    box-sizing: border-box;
-  }
+#sidebar h2 {
+  margin:0 0 20px 20px;
+  font-size:22px;
+  color:#fff;
+}
 
-  button {
-    padding: 10px 15px;
-    margin-top: 15px;
-    cursor: pointer;
-    font-size: 15px;
-    border-radius: 4px;
-    border: 1px solid #444;
-    background: #eee;
-  }
-  button:hover {
-    background: #ddd;
-  }
+#sidebar ul { list-style:none; padding:0; margin:0; }
+#sidebar li {
+  padding:12px 22px;
+  cursor:pointer;
+  transition:0.15s background;
+  border-left:4px solid transparent;
+}
+#sidebar li:hover { background:#333; }
+#sidebar li.active {
+  background:#444;
+  border-left-color:#aaa;
+  font-weight:bold;
+}
 
-  /* STEP CONTAINERS */
-  .page {
-    display: none;
-  }
-  .page.visible {
-    display: block;
-  }
+/* Dark mode toggle */
+#darkToggle {
+  margin:20px;
+  padding:10px 16px;
+  background:#555;
+  border-radius:6px;
+  cursor:pointer;
+  display:inline-block;
+  color:#fff;
+}
+body.dark #darkToggle { background:#999; color:#000; }
 
-  /* NEXT/BACK */
-  .nav-buttons {
-    margin-top: 30px;
-  }
-  .nav-buttons button {
-    margin-right: 10px;
-  }
+/* Content */
+#content {
+  flex-grow:1;
+  padding:40px;
+  max-width:980px;
+}
 
-  /* Result box */
-  .result-box {
-    border: 2px solid #555;
-    padding: 20px;
-    margin-top: 25px;
-    border-radius: 8px;
-    background: #fafafa;
-  }
+.page { display:none; }
+.page.active { display:block; }
+
+/* =========================================================
+   QUESTION UI
+   ========================================================= */
+.question {
+  background:#fff;
+  border:1px solid #ccc;
+  padding:20px;
+  margin-bottom:30px;
+  border-radius:6px;
+}
+body.dark .question {
+  background:#222;
+  border-color:#333;
+}
+
+.question h3 { margin:0 0 10px; }
+.question p.summary { color:#555; }
+
+/* =========================================================
+   INLINE ACCORDIONS
+   ========================================================= */
+details.more-info {
+  background:#eee;
+  border-left:3px solid #444;
+  padding:10px 12px;
+  border-radius:4px;
+  margin:10px 0 14px;
+}
+body.dark details.more-info {
+  background:#333;
+  border-left-color:#777;
+}
+
+details.more-info summary {
+  cursor:pointer;
+  font-weight:bold;
+}
+details.more-info p { margin:10px 0 0; }
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+button {
+  padding:12px 20px;
+  background:#222;
+  color:#fff;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+  font-size:15px;
+}
+button:hover { background:#111; }
+
+body.dark button { background:#666; color:#111; }
+body.dark button:hover { background:#444; }
+
+.button-row {
+  display:flex;
+  justify-content:space-between;
+  margin-top:40px;
+}
+
+/* =========================================================
+   TEXTAREAS
+   ========================================================= */
+textarea.export-box {
+  width:100%;
+  height:250px;
+  padding:12px;
+  border:1px solid #bbb;
+  border-radius:6px;
+  font-family:monospace;
+  resize:vertical;
+}
+body.dark textarea.export-box {
+  background:#222;
+  color:#fff;
+  border-color:#555;
+}
+
+/* =========================================================
+   TABLE (Comparison Page)
+   ========================================================= */
+table.compare {
+  width:100%;
+  border-collapse:collapse;
+  margin-bottom:40px;
+}
+table.compare th, table.compare td {
+  border:1px solid #aaa;
+  padding:10px;
+  text-align:left;
+}
+table.compare th {
+  background:#ddd;
+}
+body.dark table.compare th { background:#333; color:#fff; }
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+@media(max-width:820px) {
+  #wrapper { flex-direction:column; }
+  #sidebar { width:100%; height:auto; position:relative; }
+  #content { padding:20px; }
+}
 </style>
-</head>
 
+</head>
 <body>
+<div id="wrapper">
 
 <!-- SIDEBAR -->
-<div class="sidebar">
-  <div class="side-title">License Wizard</div>
-
-  <a class="side-link active" data-target="page1">1. Decision Tree</a>
-  <a class="side-link" data-target="page2">2. Tree Explanations</a>
-  <a class="side-link" data-target="page3">3. License Generator</a>
-  <a class="side-link" data-target="page4">4. Explain Like I'm 5</a>
-  <a class="side-link" data-target="page5">5. Export LICENSE</a>
-  <a class="side-link" data-target="page6">6. Compare Licenses</a>
-  <a class="side-link" data-target="page7">7. Badge Maker</a>
-</div>
-
-<!-- MAIN CONTENT -->
-<div class="content">
-
-<!-- PAGE 1: DECISION TREE -->
-<div id="page1" class="page visible">
-  <h1>Step 1: Interactive Decision Tree</h1>
-  <p>Select options to determine which license fits your goals.</p>
-
-  <!-- Commercial -->
-  <fieldset>
-    <legend>1. Can people make money from your code?</legend>
-    <label><input type="radio" name="commercial" value="yes"> Yes</label><br>
-    <label><input type="radio" name="commercial" value="yes-unmodified"> Yes, but unmodified</label><br>
-    <label><input type="radio" name="commercial" value="yes-no-selling"> Yes, but cannot sell code itself</label><br>
-    <label><input type="radio" name="commercial" value="no"> No</label>
-  </fieldset>
-
-  <!-- Closed Source -->
-  <fieldset>
-    <legend>2. Can people make closed-source versions?</legend>
-    <label><input type="radio" name="closed" value="yes"> Yes</label><br>
-    <label><input type="radio" name="closed" value="no"> No</label>
-  </fieldset>
-
-  <!-- Copyleft -->
-  <fieldset>
-    <legend>3. Do modified versions have to stay free?</legend>
-    <label><input type="radio" name="copyleft" value="strong"> Yes, strong copyleft</label><br>
-    <label><input type="radio" name="copyleft" value="weak"> Only modified files (weak)</label><br>
-    <label><input type="radio" name="copyleft" value="no"> No</label>
-  </fieldset>
-
-  <!-- Public editing -->
-  <fieldset>
-    <legend>4. Can the public edit, fork, share?</legend>
-    <label><input type="radio" name="public" value="yes"> Yes</label><br>
-    <label><input type="radio" name="public" value="view-only"> View Only</label><br>
-    <label><input type="radio" name="public" value="no"> No</label>
-  </fieldset>
-
-  <!-- SaaS -->
-  <fieldset>
-    <legend>5. If used on servers, must they release source?</legend>
-    <label><input type="radio" name="saas" value="yes"> Yes (AGPL)</label><br>
-    <label><input type="radio" name="saas" value="no"> No</label>
-  </fieldset>
-
-  <!-- Strict Clauses -->
-  <fieldset>
-    <legend>Strict Clauses</legend>
-    <label><input type="checkbox" id="antiAI"> Anti-AI</label><br>
-    <label><input type="checkbox" id="noGov"> No Government</label><br>
-    <label><input type="checkbox" id="noBigTech"> No Big Tech</label><br>
-    <label><input type="checkbox" id="noSaaS"> No SaaS Resale</label><br>
-    <label><input type="checkbox" id="moral"> Moral Use Only</label><br>
-    <label><input type="checkbox" id="sourceVisible"> Source Visible Only</label><br>
-    <label><input type="checkbox" id="personalOnly"> Personal Use Only</label><br>
-    <label><input type="checkbox" id="noDerivatives"> No Derivatives</label><br>
-    <label><input type="checkbox" id="attribBanner"> Attribution Banner</label><br>
-  </fieldset>
-
-  <!-- Results -->
-  <div class="result-box">
-    <h2>Recommended License</h2>
-    <div id="license-result">Waiting for input...</div>
-
-    <h2>Why this license?</h2>
-    <div id="license-explanation"></div>
-
-    <h2>Strict Clauses Selected</h2>
-    <div id="strict-list">None</div>
-  </div>
-
-  <div class="nav-buttons">
-    <button onclick="gotoPage('page2')">Next →</button>
-  </div>
-</div>
-
-<!-- PAGE 2: EXPLANATIONS -->
-<div id="page2" class="page">
-  <h1>Step 2: Question Explanations</h1>
-  <p>Here are plain-language explanations for the decision-tree options.</p>
-
-  <h2>1. Commercial Use</h2>
-  <p>Controls whether your code can be used in business or money-making activities.</p>
-
-  <h2>2. Closed-Source Versions</h2>
-  <p>If allowed, companies can hide their changes.</p>
-
-  <h2>3. Derivative Freedom</h2>
-  <p>Strong copyleft = “Always stay free.” Weak copyleft = “Keep my files free.”</p>
-
-  <h2>4. Public Editing</h2>
-  <p>Controls whether people can fork, remix, and contribute.</p>
-
-  <h2>5. SaaS Disclosure</h2>
-  <p>AGPL requires web-hosted versions to release source code.</p>
-
-  <h2>Strict Clauses (Extra Rules)</h2>
+<div id="sidebar">
+  <h2>License Wizard</h2>
   <ul>
-    <li>Anti-AI: No dataset, training, fine-tuning.</li>
-    <li>No Government Use: Blocks law enforcement, military, state agencies.</li>
-    <li>No Big Tech: Blocks Google, Meta, Apple, Microsoft, Amazon, OpenAI, etc.</li>
-    <li>No SaaS Resale: Cannot wrap into a paid service.</li>
-    <li>Moral Use: No harmful, abusive, discriminatory use.</li>
-    <li>Source Visible: People can look but not run or reuse.</li>
-    <li>Personal Use: Only individuals may use.</li>
-    <li>No Derivatives: No modified versions.</li>
-    <li>Attribution Banner: Your credit must remain visible.</li>
+    <li class="nav-item active" data-page="page1">Decision Tree</li>
+    <li class="nav-item" data-page="pageCompare">Comparison</li>
+    <li class="nav-item" data-page="page2">Explanations</li>
+    <li class="nav-item" data-page="page3">Generator</li>
+    <li class="nav-item" data-page="pageTemplates">Templates</li>
+    <li class="nav-item" data-page="page5">Result</li>
+    <li class="nav-item" data-page="page6">Export</li>
   </ul>
 
-  <div class="nav-buttons">
-    <button onclick="gotoPage('page1')">← Back</button>
-    <button onclick="gotoPage('page3')">Next →</button>
+  <div id="darkToggle">Dark Mode</div>
+</div>
+
+<!-- CONTENT -->
+<div id="content">
+  <!-- =========================================================
+     PAGE 1 — DECISION TREE
+     ========================================================= -->
+<div class="page active" id="page1">
+  <h1>Step 1 — Decision Tree</h1>
+
+  <!-- COMMERCIAL USE -->
+  <div class="question">
+    <h3>Commercial Use</h3>
+    <p class="summary">Can anyone use this in money-making products or services?</p>
+
+    <details class="more-info">
+      <summary>Learn More</summary>
+      <p>
+        Commercial use includes:
+        <br>• selling software  
+        <br>• SaaS  
+        <br>• hosting services  
+        <br>• using your code inside profitable systems  
+        <br><br>
+        If you allow commercial use, companies can integrate your work into paid products.
+      </p>
+    </details>
+
+    <label class="option"><input type="radio" name="commercial" value="yes"> Yes — fully allowed</label>
+    <label class="option"><input type="radio" name="commercial" value="limited"> Yes, but cannot resell the code itself</label>
+    <label class="option"><input type="radio" name="commercial" value="no"> No — non-commercial only</label>
+  </div>
+
+  <!-- CLOSED SOURCE -->
+  <div class="question">
+    <h3>Closed Source Allowed?</h3>
+    <p class="summary">May someone create a proprietary, closed-source version?</p>
+
+    <details class="more-info">
+      <summary>Learn More</summary>
+      <p>
+        Closed-source means a company can take your code, modify it, and never share their changes.
+        <br><br>
+        If you want to prevent that, choose “No.”
+      </p>
+    </details>
+
+    <label class="option"><input type="radio" name="closed" value="yes"> Yes — proprietary versions allowed</label>
+    <label class="option"><input type="radio" name="closed" value="no"> No — all forks must share their changes</label>
+  </div>
+
+  <!-- COPYLEFT -->
+  <div class="question">
+    <h3>Derivative Freedom (Copyleft)</h3>
+    <p class="summary">How free must modified versions remain?</p>
+
+    <details class="more-info">
+      <summary>Learn More</summary>
+      <p>
+        <strong>Strong Copyleft:</strong> All changes remain open (GPL).<br>
+        <strong>Weak Copyleft:</strong> Only modified files remain open (LGPL/MPL).<br>
+        <strong>No Copyleft:</strong> Fully permissive (MIT/Apache).
+      </p>
+    </details>
+
+    <label class="option"><input type="radio" name="copyleft" value="strong"> Strong Copyleft (GPL-style)</label>
+    <label class="option"><input type="radio" name="copyleft" value="weak"> Weak Copyleft (LGPL/MPL)</label>
+    <label class="option"><input type="radio" name="copyleft" value="none"> None (MIT/Apache style)</label>
+  </div>
+
+  <!-- PUBLIC EDITING -->
+  <div class="question">
+    <h3>Public Editing / Forks</h3>
+    <p class="summary">Should anyone be able to edit, remix, fork?</p>
+
+    <details class="more-info">
+      <summary>Learn More</summary>
+      <p>
+        If set to “View Only,” people may see the code but cannot legally fork or modify it.
+      </p>
+    </details>
+
+    <label class="option"><input type="radio" name="editing" value="yes"> Yes — free editing + forks</label>
+    <label class="option"><input type="radio" name="editing" value="view"> View Only</label>
+    <label class="option"><input type="radio" name="editing" value="no"> No — locked down</label>
+  </div>
+
+  <!-- SAAS DISCLOSURE -->
+  <div class="question">
+    <h3>SaaS / Web Disclosure (AGPL Behavior)</h3>
+    <p class="summary">Must hosted versions (SaaS) publish their source?</p>
+
+    <details class="more-info">
+      <summary>Learn More</summary>
+      <p>
+        Normally, GPL permits SaaS companies to hide changes.
+        <br><br>
+        AGPL closes that loophole by forcing SaaS/cloud hosts to publish modifications
+        even if they never distribute a binary.
+      </p>
+    </details>
+
+    <label class="option"><input type="radio" name="saas" value="yes"> Yes — require AGPL behavior</label>
+    <label class="option"><input type="radio" name="saas" value="no"> No</label>
+  </div>
+
+  <!-- STRICT CLAUSES -->
+  <div class="question">
+    <h3>Strict Clauses</h3>
+    <p class="summary">Add optional limiters on how your work is used.</p>
+
+    <details class="more-info">
+      <summary>Learn More</summary>
+      <p>
+        These clauses override normal license freedoms.
+        <br><br>
+        They can restrict:
+        <br>• AI/ML usage  
+        • Government usage  
+        • Big-tech usage  
+        • Moral/ethical usage  
+        • Personal-use-only  
+        • Forbidding redistribution  
+        • Forcing visible attribution banners  
+        </p>
+    </details>
+
+    <label class="option"><input type="checkbox" name="strict" value="anti-ai"> Anti-AI Training</label>
+    <label class="option"><input type="checkbox" name="strict" value="no-gov"> No Government Use</label>
+    <label class="option"><input type="checkbox" name="strict" value="no-bigtech"> No Big-Tech Use</label>
+    <label class="option"><input type="checkbox" name="strict" value="moral"> Moral Use Only</label>
+    <label class="option"><input type="checkbox" name="strict" value="source-visible"> Source Visible Only</label>
+    <label class="option"><input type="checkbox" name="strict" value="personal-only"> Personal-Use Only</label>
+    <label class="option"><input type="checkbox" name="strict" value="attrib-banner"> Attribution Banner</label>
+    <label class="option"><input type="checkbox" name="strict" value="no-saas-resale"> No SaaS Resale</label>
+    <label class="option"><input type="checkbox" name="strict" value="no-surveillance"> No Surveillance Use</label>
+  </div>
+
+  <!-- RECOMMENDATION -->
+  <div class="question">
+    <h3>Recommended License</h3>
+    <div id="licenseRecommendation">(Waiting for selections…)</div>
+    <div id="licenseWhy" style="margin-top:10px;color:#777;"></div>
+  </div>
+
+  <div class="button-row">
+    <button id="next1">Next →</button>
   </div>
 </div>
 
-<!-- PAGE 3: LICENSE GENERATOR -->
-<div id="page3" class="page">
-  <h1>Step 3: License Generator</h1>
-  <p>This will fetch the full license text from official sources and insert your details + strict clauses.</p>
 
-  <fieldset>
-    <legend>Your Info</legend>
-    <label>Your Name<br><input id="author" placeholder="Olivia Griffin"></label><br><br>
-    <label>Year<br><input id="year" placeholder="2025"></label><br>
-  </fieldset>
 
-  <button onclick="generateFullLicense()">Generate Full License Text</button>
-  <button onclick="copyLicenseText()">Copy to Clipboard</button>
+<!-- =========================================================
+     PAGE COMPARE — FULL LICENSE TABLE
+     ========================================================= -->
+<div class="page" id="pageCompare">
+  <h1>License Comparison Table</h1>
 
-  <textarea id="full-license-output" placeholder="Full license text will appear here..."></textarea>
+  <table class="compare">
+    <tr>
+      <th>License</th>
+      <th>Commercial Use</th>
+      <th>Closed Source?</th>
+      <th>Derivative Freedom</th>
+      <th>SaaS Required?</th>
+      <th>Attribution?</th>
+    </tr>
 
-  <div class="nav-buttons">
-    <button onclick="gotoPage('page2')">← Back</button>
-    <button onclick="gotoPage('page4')">Next →</button>
-  </div>
-</div>
+    <tr>
+      <td>MIT</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>None (fully permissive)</td>
+      <td>No</td>
+      <td>Minimal</td>
+    </tr>
 
-<!-- PAGE 4: ELI5 -->
-<div id="page4" class="page">
-  <h1>Step 4: Explain Like I'm 5</h1>
-  <p>Explains your license in simple kid-level language.</p>
+    <tr>
+      <td>Apache 2.0</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>None (permissive)</td>
+      <td>No</td>
+      <td>Yes</td>
+    </tr>
 
-  <button onclick="explainLikeFive()">Explain My License</button>
+    <tr>
+      <td>GPLv3</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>Strong Copyleft</td>
+      <td>No</td>
+      <td>Yes</td>
+    </tr>
 
-  <textarea id="eli5-output"></textarea>
+    <tr>
+      <td>AGPLv3</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>Strong Copyleft</td>
+      <td><strong>Yes</strong></td>
+      <td>Yes</td>
+    </tr>
 
-  <div class="nav-buttons">
-    <button onclick="gotoPage('page3')">← Back</button>
-    <button onclick="gotoPage('page5')">Next →</button>
-  </div>
-</div>
+    <tr>
+      <td>LGPLv3</td>
+      <td>Yes</td>
+      <td>Yes (only the library must stay open)</td>
+      <td>Weak Copyleft</td>
+      <td>No</td>
+      <td>Yes</td>
+    </tr>
 
-<!-- PAGE 5: EXPORT LICENSE -->
-<div id="page5" class="page">
-  <h1>Step 5: Export LICENSE File</h1>
+    <tr>
+      <td>MPL 2.0</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>Weak Copyleft (file-level)</td>
+      <td>No</td>
+      <td>Yes</td>
+    </tr>
 
-  <button onclick="exportLICENSE()">Download LICENSE File</button>
-  <p>The downloaded file will contain the license from the generator step.</p>
+    <tr>
+      <td><strong>Griffin Strict License</strong></td>
+      <td>No (unless explicitly allowed)</td>
+      <td>No</td>
+      <td>None — fully restricted</td>
+      <td>Yes (if selected)</td>
+      <td>Yes (custom rules)</td>
+    </tr>
 
-  <div class="nav-buttons">
-    <button onclick="gotoPage('page4')">← Back</button>
-    <button onclick="gotoPage('page6')">Next →</button>
-  </div>
-</div>
+    <tr>
+      <td><strong>Griffin Personal-Use License</strong></td>
+      <td>No</td>
+      <td>No</td>
+      <td>None</td>
+      <td>No</td>
+      <td>Yes</td>
+    </tr>
 
-<!-- PAGE 6: COMPARISON -->
-<div id="page6" class="page">
-  <h1>Step 6: License Comparison</h1>
-
-  <table border="1" cellpadding="6">
-    <tr><th>License</th><th>Commercial</th><th>Closed Source</th><th>Stay Free</th><th>SaaS Disclosure</th><th>Patent</th><th>Notes</th></tr>
-    <tr><td>MIT</td><td>Yes</td><td>Yes</td><td>No</td><td>No</td><td>No</td><td>Most permissive</td></tr>
-    <tr><td>Apache 2.0</td><td>Yes</td><td>Yes</td><td>No</td><td>No</td><td>Yes</td><td>Patent protection</td></tr>
-    <tr><td>GPLv3</td><td>Yes</td><td>No</td><td>Yes</td><td>No</td><td>No</td><td>Strong copyleft</td></tr>
-    <tr><td>AGPLv3</td><td>Yes</td><td>No</td><td>Yes</td><td>Yes</td><td>No</td><td>Strongest copyleft</td></tr>
-    <tr><td>MPL 2.0</td><td>Yes</td><td>Yes</td><td>Files only</td><td>No</td><td>No</td><td>Weak copyleft</td></tr>
   </table>
 
-  <div class="nav-buttons">
-    <button onclick="gotoPage('page5')">← Back</button>
-    <button onclick="gotoPage('page7')">Next →</button>
+  <div class="button-row">
+    <button id="backCompare">← Back</button>
+    <button id="nextCompare">Next →</button>
   </div>
 </div>
 
-<!-- PAGE 7: BADGE MAKER -->
-<div id="page7" class="page">
-  <h1>Step 7: Badge Maker</h1>
 
-  <label>Label:<br><input id="badge-label" placeholder="license"></label><br>
-  <label>Value:<br><input id="badge-value" placeholder="MIT"></label><br>
-  <label>Color:<br><input id="badge-color" placeholder="blue"></label><br><br>
 
-  <button onclick="makeBadge()">Generate Badge</button>
 
-  <h3>Markdown</h3>
-  <textarea id="badge-markdown"></textarea>
+<!-- =========================================================
+     PAGE 2 — EXPLANATIONS
+     ========================================================= -->
+<div class="page" id="page2">
+  <h1>Detailed License Concepts</h1>
 
-  <h3>Image URL</h3>
-  <textarea id="badge-url"></textarea>
+  <div class="question">
+    <h3>Commercial Use</h3>
+    <details class="more-info">
+      <summary>Explanation</summary>
+      <p>Whether someone can use this project inside paid apps, SaaS, or business environments.</p>
+    </details>
+  </div>
 
-  <div class="nav-buttons">
-    <button onclick="gotoPage('page6')">← Back</button>
+  <div class="question">
+    <h3>Closed Source / Proprietary</h3>
+    <details class="more-info">
+      <summary>Explanation</summary>
+      <p>If allowed, a company may keep their modifications private, even if built on your code.</p>
+    </details>
+  </div>
+
+  <div class="question">
+    <h3>Copyleft</h3>
+    <details class="more-info">
+      <summary>Explanation</summary>
+      <p>Determines whether modifications must remain open-source (GPL) or may become closed (MIT).</p>
+    </details>
+  </div>
+
+  <div class="question">
+    <h3>SaaS / AGPL Requirement</h3>
+    <details class="more-info">
+      <summary>Explanation</summary>
+      <p>AGPL closes the cloud loophole—if a company runs your program over the internet, they must publish changes.</p>
+    </details>
+  </div>
+
+  <div class="question">
+    <h3>Strict Clauses</h3>
+    <details class="more-info">
+      <summary>Explanation</summary>
+      <p>
+        These override normal freedoms and ban specific use cases like:
+        AI training, government, moral/ethical restrictions, and redistribution rules.
+      </p>
+    </details>
+  </div>
+
+  <div class="button-row">
+    <button id="back2">← Back</button>
+    <button id="next2">Next →</button>
   </div>
 </div>
 
+
+
+<!-- =========================================================
+     PAGE 3 — GENERATOR
+     ========================================================= -->
+<div class="page" id="page3">
+  <h1>Generate Your License</h1>
+
+  <div class="question">
+    <h3>Your Name</h3>
+    <input id="authorName" style="width:100%;padding:10px;font-size:15px;">
+  </div>
+
+  <div class="question">
+    <h3>Year</h3>
+    <input id="licenseYear" placeholder="2025" style="width:100%;padding:10px;font-size:15px;">
+  </div>
+
+  <!-- Base License -->
+  <div class="question">
+    <h3>Base License</h3>
+    <label class="option"><input type="radio" name="base" value="MIT"> MIT</label>
+    <label class="option"><input type="radio" name="base" value="Apache"> Apache 2.0</label>
+    <label class="option"><input type="radio" name="base" value="GPLv3"> GPLv3</label>
+    <label class="option"><input type="radio" name="base" value="AGPLv3"> AGPLv3</label>
+    <label class="option"><input type="radio" name="base" value="LGPLv3"> LGPLv3</label>
+    <label class="option"><input type="radio" name="base" value="MPL"> MPL 2.0</label>
+    <label class="option"><input type="radio" name="base" value="GRIFFIN"> Griffin Strict License</label>
+    <label class="option"><input type="radio" name="base" value="GRIFFIN-PU"> Griffin Personal-Use License</label>
+  </div>
+
+  <!-- Strict clauses (builder) -->
+  <div class="question">
+    <h3>Strict Clauses (Optional)</h3>
+    <label class="option"><input type="checkbox" name="genStrict" value="anti-ai"> Anti-AI Training</label>
+    <label class="option"><input type="checkbox" name="genStrict" value="no-gov"> No Government Use</label>
+    <label class="option"><input type="checkbox" name="genStrict" value="no-bigtech"> No Big-Tech Use</label>
+    <label class="option"><input type="checkbox" name="genStrict" value="moral"> Moral Use Only</label>
+    <label class="option"><input type="checkbox" name="genStrict" value="source-visible"> Source Visible Only</label>
+    <label class="option"><input type="checkbox" name="genStrict" value="personal-only"> Personal-Use Only</label>
+    <label class="option"><input type="checkbox" name="genStrict" value="attrib-banner"> Attribution Banner</label>
+    <label class="option"><input type="checkbox" name="genStrict" value="no-saas-resale"> No SaaS Resale</label>
+    <label class="option"><input type="checkbox" name="genStrict" value="no-surveillance"> No Surveillance Use</label>
+  </div>
+
+  <div class="button-row">
+    <button id="back3">← Back</button>
+    <button id="next3">Generate →</button>
+  </div>
 </div>
 
-<script>
-function gotoPage(id){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('visible'));
-  document.querySelectorAll('.side-link').forEach(s=>s.classList.remove('active'));
-  document.querySelector(`.side-link[data-target="${id}"]`)?.classList.add('active');
-  document.getElementById(id).classList.add('visible');
+
+
+
+<!-- =========================================================
+     PAGE TEMPLATES
+     ========================================================= -->
+<div class="page" id="pageTemplates">
+  <h1>Quick Templates</h1>
+  <p>Click a template to auto-fill generator settings.</p>
+
+  <div class="question">
+    <h3>Standard Open-Source</h3>
+    <button class="templateBtn" data-template="MIT">MIT</button>
+    <button class="templateBtn" data-template="Apache">Apache 2.0</button>
+    <button class="templateBtn" data-template="GPLv3">GPLv3</button>
+    <button class="templateBtn" data-template="AGPLv3">AGPLv3</button>
+  </div>
+
+  <div class="question">
+    <h3>Griffin Licenses</h3>
+    <button class="templateBtn" data-template="GRIFFIN">Griffin Strict License</button>
+    <button class="templateBtn" data-template="GRIFFIN-PU">Griffin Personal-Use License</button>
+  </div>
+
+  <div class="question">
+    <h3>Use-Case Templates</h3>
+    <button class="templateBtn" data-template="strict-noncommercial">Strict Non-Commercial</button>
+    <button class="templateBtn" data-template="strict-anti-ai">Strict + Anti-AI</button>
+    <button class="templateBtn" data-template="strict-ethical">Moral & Ethical-Use Only</button>
+    <button class="templateBtn" data-template="strict-private">Private Code Only</button>
+    <button class="templateBtn" data-template="strict-nosurv">No Surveillance Allowed</button>
+  </div>
+
+  <div class="button-row">
+    <button id="backTemplates">← Back</button>
+    <button id="nextTemplates">Next →</button>
+  </div>
+</div>
+
+
+
+
+<!-- =========================================================
+     PAGE RESULT
+     ========================================================= -->
+<div class="page" id="page5">
+  <h1>Your Generated License</h1>
+
+  <textarea id="resultBox" class="export-box"></textarea>
+
+  <div class="button-row">
+    <button id="back5">← Back</button>
+    <button id="next5">Next →</button>
+  </div>
+</div>
+
+
+
+<!-- =========================================================
+     PAGE EXPORT
+     ========================================================= -->
+<div class="page" id="page6">
+  <h1>Export</h1>
+
+  <button onclick="copyToClipboard()">Copy to Clipboard</button>
+  <button onclick="downloadLicense()">Download LICENSE.txt</button>
+  <button onclick="exportPDF()">Export PDF</button>
+
+  <h2 style="margin-top:40px;">README Badge</h2>
+  <textarea id="badgeBox" class="export-box"></textarea>
+
+  <div class="button-row">
+    <button id="back6">← Back</button>
+  </div>
+</div>
+  <script>
+/* =========================================================
+   PAGE NAVIGATION
+   ========================================================= */
+const pages = document.querySelectorAll(".page");
+const navItems = document.querySelectorAll(".nav-item");
+
+function showPage(id) {
+  pages.forEach(p => p.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+
+  navItems.forEach(i => i.classList.remove("active"));
+  const nav = document.querySelector(`.nav-item[data-page="${id}"]`);
+  if (nav) nav.classList.add("active");
 }
 
-/* DECISION TREE LOGIC */
-let chosenLicense="MIT";
+/* Sidebar item click */
+navItems.forEach(item => {
+  item.addEventListener("click", () => showPage(item.dataset.page));
+});
 
-function getStrict(){
-  const arr=[];
-  ['antiAI','noGov','noBigTech','noSaaS','moral','sourceVisible','personalOnly','noDerivatives','attribBanner']
-  .forEach(idName=>{
-    if(document.getElementById(idName).checked) arr.push(idName);
-  });
-  return arr;
+/* Buttons */
+document.getElementById("next1").onclick = () => showPage("pageCompare");
+document.getElementById("backCompare").onclick = () => showPage("page1");
+document.getElementById("nextCompare").onclick = () => showPage("page2");
+document.getElementById("back2").onclick = () => showPage("pageCompare");
+document.getElementById("next2").onclick = () => showPage("page3");
+document.getElementById("back3").onclick = () => showPage("page2");
+document.getElementById("next3").onclick = () => generateLicense();
+document.getElementById("back5").onclick = () => showPage("page3");
+document.getElementById("next5").onclick = () => showPage("page6");
+document.getElementById("back6").onclick = () => showPage("page5");
+document.getElementById("backTemplates").onclick = () => showPage("page3");
+document.getElementById("nextTemplates").onclick = () => showPage("page5");
+
+/* =========================================================
+   DARK MODE
+   ========================================================= */
+document.getElementById("darkToggle").onclick = () => {
+  document.body.classList.toggle("dark");
+};
+
+/* =========================================================
+   LICENSE RECOMMENDATION LOGIC
+   ========================================================= */
+const recBox = document.getElementById("licenseRecommendation");
+const recWhy = document.getElementById("licenseWhy");
+const treeInputs = document.querySelectorAll("#page1 input");
+
+treeInputs.forEach(i => i.addEventListener("change", updateRecommendation));
+
+function getRadio(name) {
+  const el = document.querySelector(`input[name='${name}']:checked`);
+  return el ? el.value : null;
 }
 
-document.body.addEventListener("change", update);
+function updateRecommendation() {
+  const commercial = getRadio("commercial");
+  const closed = getRadio("closed");
+  const copyleft = getRadio("copyleft");
+  const saas = getRadio("saas");
 
-function update(){
-  const commercial=get("commercial");
-  const closed=get("closed");
-  const copyleft=get("copyleft");
-  const pub=get("public");
-  const saas=get("saas");
-  const strict=getStrict();
-
-  function setResult(name, why){
-    chosenLicense=name;
-    document.getElementById("license-result").innerText=name;
-    document.getElementById("license-explanation").innerText=why;
-    document.getElementById("strict-list").innerText=strict.length?strict.join(", "):"None";
-  }
-
-  if(pub==="no"||pub==="view-only"){
-    setResult("Strict Proprietary License","Editing/forking blocked.");
+  if (!commercial || !closed || !copyleft || !saas) {
+    recBox.innerText = "(Waiting for selections...)";
+    recWhy.innerText = "";
     return;
   }
 
-  if(commercial==="no"||closed==="no"||copyleft==="strong"){
-    if(saas==="yes"){
-      setResult("AGPLv3","Strong copyleft + SaaS requirement.");
-      return;
-    }
-    setResult("GPLv3","Strong copyleft keeps all modified versions free.");
-    return;
+  let rec = "";
+  let why = "";
+
+  if (copyleft === "strong" && saas === "yes") {
+    rec = "AGPLv3";
+    why = "You want strong copyleft AND SaaS code-disclosure.";
+  } else if (copyleft === "strong") {
+    rec = "GPLv3";
+    why = "Strong copyleft requires GPL.";
+  } else if (copyleft === "weak") {
+    rec = "MPL 2.0 or LGPL";
+    why = "Weak copyleft suggests MPL/LGPL.";
+  } else if (copyleft === "none" && closed === "yes") {
+    rec = "MIT or Apache 2.0";
+    why = "You want permissive + allow closed source.";
+  } else {
+    rec = "MIT";
+    why = "Default permissive license.";
   }
 
-  if(copyleft==="weak"){
-    setResult("MPL 2.0","Weak copyleft: only modified files must stay open.");
-    return;
-  }
-
-  if(commercial==="yes"&&closed==="yes"&&copyleft==="no"){
-    setResult("MIT","Permissive license.");
-    return;
-  }
-
-  setResult("MIT","Default permissive license.");
+  recBox.innerText = rec;
+  recWhy.innerText = why;
 }
 
-function get(name){
-  const el=document.querySelector(`input[name="${name}"]:checked`);
-  return el?el.value:null;
+/* =========================================================
+   TEMPLATES (AUTOFILL)
+   ========================================================= */
+document.querySelectorAll(".templateBtn").forEach(btn => {
+  btn.addEventListener("click", () => applyTemplate(btn.dataset.template));
+});
+
+function clearGenerator() {
+  document.querySelectorAll("input[name='base']").forEach(x => x.checked = false);
+  document.querySelectorAll("input[name='genStrict']").forEach(x => x.checked = false);
 }
 
-/* AUTO-FETCH LICENSE TEXT */
-async function fetchLicenseText(type){
-  const urls={
-    gpl:"https://www.gnu.org/licenses/gpl-3.0.txt",
-    agpl:"https://www.gnu.org/licenses/agpl-3.0.txt",
-    mit:"https://raw.githubusercontent.com/licenses/license-templates/master/templates/mit.txt",
-    apache:"https://www.apache.org/licenses/LICENSE-2.0.txt",
-    bsd:"https://raw.githubusercontent.com/licenses/license-templates/master/templates/bsd3.txt",
-    mpl:"https://www.mozilla.org/media/MPL/2.0/index.txt"
-  };
-  try{
-    const r=await fetch(urls[type]);
-    return await r.text();
-  }catch{
-    return `Error fetching ${type}`;
+function applyTemplate(t) {
+  clearGenerator();
+
+  const baseOpt = document.querySelector(`input[name='base'][value='${t}']`);
+  if (baseOpt) baseOpt.checked = true;
+
+  if (t === "strict-noncommercial") {
+    document.querySelector(`input[value='MIT']`).checked = true;
+    checkStrict("personal-only");
+    checkStrict("no-gov");
   }
+
+  if (t === "strict-anti-ai") {
+    document.querySelector(`input[value='MIT']`).checked = true;
+    checkStrict("anti-ai");
+  }
+
+  if (t === "strict-ethical") {
+    document.querySelector(`input[value='MIT']`).checked = true;
+    checkStrict("moral");
+  }
+
+  if (t === "strict-nosurv") {
+    document.querySelector(`input[value='MIT']`).checked = true;
+    checkStrict("no-surveillance");
+  }
+
+  if (t === "strict-private") {
+    document.querySelector(`input[value='MIT']`).checked = true;
+    checkStrict("source-visible");
+    checkStrict("personal-only");
+  }
+
+  function checkStrict(v) {
+    const el = document.querySelector(`input[name='genStrict'][value='${v}']`);
+    if (el) el.checked = true;
+  }
+
+  showPage("page3");
 }
 
-async function generateFullLicense(){
-  const name=document.getElementById("author").value||"Author";
-  const year=document.getElementById("year").value||new Date().getFullYear();
-  const strictList=getStrict();
+/* =========================================================
+   LICENSE TEXTS — BASE OSS LICENSES
+   ========================================================= */
 
-  let baseText="";
+const BASE_LICENSES = {
+  MIT: (y, a) => `
+MIT License
+Copyright (c) ${y} ${a}
 
-  if(chosenLicense==="MIT"){
-    baseText=await fetchLicenseText("mit");
-  }else if(chosenLicense==="GPLv3"){
-    baseText=await fetchLicenseText("gpl");
-  }else if(chosenLicense==="AGPLv3"){
-    baseText=await fetchLicenseText("agpl");
-  }else if(chosenLicense==="MPL 2.0"){
-    baseText=await fetchLicenseText("mpl");
-  }else if(chosenLicense==="Strict Proprietary License"){
-baseText=
-`Copyright © ${year} ${name}
-All Rights Reserved.
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files...
 
-You may view the source, but may not run, modify, reuse, or distribute it.`;
-  }
+[Full MIT license text goes here — shortened in demo]
+`,
 
-  let final=
-`License: ${chosenLicense}
-Copyright © ${year} ${name}
+  Apache: (y, a) => `
+Apache License 2.0
+Copyright ${y} ${a}
 
-${baseText}
+Licensed under the Apache License, Version 2.0...
 
-Additional Clauses:
-${strictList.length?strictList.join("\n"):"None"}
+[Full Apache license text goes here — shortened in demo]
+`,
+
+  GPLv3: (y, a) => `
+GNU GENERAL PUBLIC LICENSE Version 3
+Copyright (C) ${y} ${a}
+
+Everyone is permitted to copy and distribute verbatim copies
+of this license document...
+
+[Full GPLv3 text goes here — shortened in demo]
+`,
+
+  AGPLv3: (y, a) => `
+GNU AFFERO GENERAL PUBLIC LICENSE Version 3
+Copyright (C) ${y} ${a}
+
+Everyone is permitted to copy and distribute verbatim copies...
+
+[Full AGPLv3 text goes here — shortened in demo]
+`,
+
+  LGPLv3: (y, a) => `
+GNU LESSER GENERAL PUBLIC LICENSE Version 3
+Copyright (C) ${y} ${a}
+
+[Full LGPL text...]
+`,
+
+  MPL: (y, a) => `
+Mozilla Public License 2.0
+Copyright ${y} ${a}
+
+[Full MPL text...]
+`,
+};
+
+/* =========================================================
+   GRIFFIN STRICT LICENSE TEMPLATE
+   ========================================================= */
+const GRIFFIN_STRICT = (y, a) => `
+GRIFFIN STRICT LICENSE v1.0
+Copyright (C) ${y} ${a}
+
+This is a restrictive, non-permissive license intended to protect the author's
+work from commercial misuse, unethical usage, AI-model exploitation, and any
+redistribution not explicitly granted in writing.
+
+1. NO COMMERCIAL USE
+   This work may not be used in any revenue-generating product, service, or 
+   business context without explicit written permission.
+
+2. NO CLOSED SOURCE
+   All access to this work must remain source-visible. You may not distribute 
+   modified or unmodified versions without making the full, unaltered source 
+   publicly viewable.
+
+3. NO REDISTRIBUTION
+   Redistribution, modification, sublicensing, or hosting of this work is 
+   prohibited unless explicitly allowed by the author.
+
+4. NO SaaS RESALE
+   You may not host this work as a paid or freemium service.
+
+5. NO BIG-TECH OR GOVERNMENT USE
+   Entities with >1,000 employees, >$100M revenue, or any governmental /
+   state-affiliated body may not use this work.
+
+6. MORAL USE ONLY
+   This work may not be used for surveillance, profiling, military purposes,
+   exploitation, or discrimination.
+
+7. NO AI TRAINING
+   This work may not be used to train, fine-tune, or operate machine learning,
+   neural networks, or any AI system.
+
+8. ATTRIBUTION BANNER (If Selected)
+   A visible banner crediting the author must appear in UI surfaces unless 
+   waived in writing.
+
+This license is intentionally strict and incompatible with most open-source or
+commercial licenses. It is provided “as is,” with no warranties.
 `;
-  document.getElementById("full-license-output").value=final;
+
+/* =========================================================
+   GRIFFIN PERSONAL-USE LICENSE
+   ========================================================= */
+const GRIFFIN_PU = (y, a) => `
+GRIFFIN PERSONAL-USE LICENSE v1.0
+Copyright (C) ${y} ${a}
+
+This license allows individuals to use this work privately and personally,
+while prohibiting redistribution, modification, resale, or incorporation
+into commercial products.
+
+1. PERSONAL USE ONLY
+   You may use this work for personal, private, or educational purposes.
+
+2. NO COMMERCIAL USE
+   No business or revenue-generating use is allowed.
+
+3. NO REDISTRIBUTION
+   You may not share, publish, or distribute the work.
+
+4. NO MODIFICATION
+   You may not alter, fork, or remix this work.
+
+5. NO AI TRAINING
+   You may not use this work to train or fine-tune AI/ML models.
+
+6. NO GOVERNMENT OR BIG-TECH USE
+   Same restrictions as the Griffin Strict License.
+
+7. SOURCE-VISIBLE REQUIREMENT
+   You may view the source code but may not publish or re-host it.
+
+This license is strict by design and incompatible with open-source norms.
+`;
+
+/* =========================================================
+   STRICT CLAUSES (MODULAR ADD-ONS)
+   ========================================================= */
+function buildStrictClauses(strict) {
+  if (!strict.length) return "";
+
+  let txt = `
+------------------------------
+ADDITIONAL STRICT CLAUSES
+------------------------------`;
+
+  const list = {
+    "anti-ai": `
+ANTI-AI TRAINING  
+This work may not be used to train, fine-tune, or operate any AI/ML system.`,
+
+    "no-gov": `
+NO GOVERNMENT USE  
+Government, military, or law-enforcement bodies may not use this work.`,
+
+    "no-bigtech": `
+NO BIG-TECH USE  
+Any entity with over 1,000 employees OR annual revenue above $100M
+may not use this work.`,
+
+    "moral": `
+MORAL USE ONLY  
+This work may not be used for surveillance, profiling, exploitation, 
+violence, harassment, or discriminatory systems.`,
+
+    "source-visible": `
+SOURCE-VISIBLE DEPLOYMENTS  
+All deployments or hosted versions must provide a direct, accessible link 
+to the full source code.`,
+
+    "personal-only": `
+PERSONAL USE ONLY  
+This work may only be used by individuals for private, non-commercial use.`,
+
+    "attrib-banner": `
+ATTRIBUTION BANNER  
+All derived works must include a visible credit banner referencing the author.`,
+
+    "no-saas-resale": `
+NO SAAS RESALE  
+You may not host or sell this work as a service or subscription.`,
+
+    "no-surveillance": `
+NO SURVEILLANCE  
+This work may not be used for user tracking, monitoring, behavioral analysis,
+predictive policing, or biometric profiling.`,
+  };
+
+  strict.forEach(s => {
+    if (list[s]) txt += "\n" + list[s] + "\n";
+  });
+
+  return txt;
 }
 
-/* CLIPBOARD */
-function copyLicenseText(){
-  navigator.clipboard.writeText(document.getElementById("full-license-output").value);
-  alert("Copied!");
+/* =========================================================
+   FINAL LICENSE GENERATOR
+   ========================================================= */
+function generateLicense() {
+  const author = document.getElementById("authorName").value.trim();
+  const year = document.getElementById("licenseYear").value.trim();
+  const base = document.querySelector("input[name='base']:checked")?.value;
+  const strict = Array.from(document.querySelectorAll("input[name='genStrict']:checked")).map(x => x.value);
+
+  if (!author || !year || !base) {
+    alert("Please fill author, year, and base license.");
+    return;
+  }
+
+  let licenseText = "";
+
+  if (base === "GRIFFIN") {
+    licenseText = GRIFFIN_STRICT(year, author);
+  } else if (base === "GRIFFIN-PU") {
+    licenseText = GRIFFIN_PU(year, author);
+  } else {
+    licenseText = BASE_LICENSES[base](year, author);
+  }
+
+  /* Append strict clauses (optional) */
+  licenseText += buildStrictClauses(strict);
+
+  document.getElementById("resultBox").value = licenseText;
+
+  /* Badge */
+  document.getElementById("badgeBox").value =
+    `[![License: ${base}](https://img.shields.io/badge/license-${base}-blue.svg)](LICENSE)`;
+
+  showPage("page5");
 }
 
-/* ELI5 */
-function explainLikeFive(){
-  let msg="";
-
-  if(chosenLicense==="MIT") msg="MIT means anyone can use your code however they want.";
-  if(chosenLicense==="GPLv3") msg="GPL means if they change your code, they must share it.";
-  if(chosenLicense==="AGPLv3") msg="AGPL means GPL rules + must share if used on a website.";
-  if(chosenLicense==="MPL 2.0") msg="MPL means only changed files must stay open.";
-  if(chosenLicense==="Strict Proprietary License") msg="Strict means they can see code but not use it.";
-
-  msg+=`\n\nExtra Rules:\n${getStrict().join(", ")||"None"}`;
-
-  document.getElementById("eli5-output").value=msg;
+/* =========================================================
+   EXPORT FUNCTIONS
+   ========================================================= */
+function copyToClipboard() {
+  navigator.clipboard.writeText(document.getElementById("resultBox").value);
+  alert("Copied to clipboard!");
 }
 
-/* EXPORT */
-function exportLICENSE(){
-  const text=document.getElementById("full-license-output").value;
-  const blob=new Blob([text],{type:"text/plain"});
-  const a=document.createElement("a");
-  a.href=URL.createObjectURL(blob);
-  a.download="LICENSE";
+function downloadLicense() {
+  const text = document.getElementById("resultBox").value;
+  const blob = new Blob([text], { type: "text/plain" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "LICENSE.txt";
   a.click();
 }
 
-/* BADGE MAKER */
-function makeBadge(){
-  const label=document.getElementById("badge-label").value||"license";
-  const value=document.getElementById("badge-value").value||chosenLicense;
-  const color=document.getElementById("badge-color").value||"blue";
+function exportPDF() {
+  const text = document.getElementById("resultBox").value.replace(/\n/g, "<br>");
+  const w = window.open("", "_blank");
 
-  const url=
-`https://img.shields.io/badge/${encodeURIComponent(label)}-${encodeURIComponent(value)}-${color}`;
+  w.document.write(`
+    <html><head>
+    <title>License PDF</title>
+    <style>
+      body { font-family: monospace; padding:40px; }
+      pre { white-space: pre-wrap; }
+    </style>
+    </head><body>
+    <pre>${text}</pre>
+    <script>window.print();<\/script>
+    </body></html>
+  `);
 
-  document.getElementById("badge-url").value=url;
-  document.getElementById("badge-markdown").value=`![${label}](${url})`;
+  w.document.close();
 }
-</script>
 
+/* =========================================================
+   END JS
+   ========================================================= */
+</script>
 </body>
 </html>
