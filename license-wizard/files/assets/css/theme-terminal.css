@@ -1,0 +1,27 @@
+body.theme-terminal {
+  --bg: #000000;
+  --text: #11ff11;
+  --card-bg: #000000;
+  --card-border: #11ff11;
+  --accent: #11ff11;
+  --accent-hover: #0ecf0e;
+  --sidebar-bg: #000000;
+  --sidebar-border: #11ff11;
+}
+
+body.theme-terminal {
+  font-family: "Fira Code", "Courier New", monospace;
+}
+
+#sidebar li:hover {
+  background: rgba(17,255,17,0.1);
+}
+
+.card {
+  border-width: 2px;
+}
+
+.help-bubble {
+  border-color: var(--accent);
+  color: var(--accent);
+}
