@@ -1,0 +1,247 @@
+/* --------------------------------------------------
+   Base Layout / Reset
+-------------------------------------------------- */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, sans-serif;
+  overflow: hidden;
+}
+
+:root {
+  --bg: #f8f9fa;
+  --text: #1a1a1a;
+  --card-bg: #ffffff;
+  --card-border: #dadada;
+  --accent: #0366d6;
+  --accent-hover: #024d9f;
+  --sidebar-bg: #ffffff;
+  --sidebar-border: #e4e4e4;
+}
+
+/* --------------------------------------------------
+   Sidebar
+-------------------------------------------------- */
+
+#sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 260px;
+  height: 100%;
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--sidebar-border);
+  padding: 30px 20px;
+  overflow-y: auto;
+}
+
+#sidebar h2 {
+  margin-bottom: 20px;
+  font-size: 1.6rem;
+}
+
+#sidebar ul {
+  list-style: none;
+}
+
+#sidebar li {
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 6px;
+  margin-bottom: 5px;
+}
+
+#sidebar li:hover {
+  background: rgba(0,0,0,0.05);
+}
+
+#sidebar li.active {
+  background: var(--accent);
+  color: white;
+}
+
+/* Theme switcher */
+
+.theme-switcher {
+  margin-top: 35px;
+}
+
+.theme-switcher h4 {
+  margin-bottom: 10px;
+}
+
+.theme-switcher button {
+  display: block;
+  width: 100%;
+  margin-bottom: 6px;
+  padding: 8px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.theme-switcher button:hover {
+  border-color: var(--accent);
+}
+
+
+/* --------------------------------------------------
+   Main area
+-------------------------------------------------- */
+
+#content {
+  margin-left: 260px;
+  padding: 30px;
+  height: 100%;
+  overflow-y: auto;
+}
+
+h1 {
+  margin-bottom: 20px;
+}
+
+p {
+  margin-bottom: 15px;
+}
+
+/* Wizard cards */
+
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: 18px;
+  margin-bottom: 16px;
+}
+
+.card h3 {
+  margin-bottom: 10px;
+}
+
+/* Buttons */
+
+button {
+  background: var(--accent);
+  border: none;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+button:hover {
+  background: var(--accent-hover);
+}
+
+button[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Navigation buttons */
+
+.nav-buttons {
+  margin-top: 30px;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Pages */
+
+.page {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.page.active {
+  display: block;
+}
+
+.fade-page.active {
+  opacity: 1;
+}
+
+
+/* Textareas */
+
+textarea {
+  width: 100%;
+  height: 350px;
+  padding: 14px;
+  border-radius: 8px;
+  border: 1px solid var(--card-border);
+  background: var(--card-bg);
+  color: var(--text);
+  font-family: monospace;
+  resize: vertical;
+}
+
+
+/* Comparison table */
+
+#comparison-table table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+#comparison-table th,
+#comparison-table td {
+  padding: 12px;
+  border: 1px solid var(--card-border);
+}
+
+#comparison-table th {
+  background: rgba(0,0,0,0.05);
+}
+
+
+/* Accordion explanation blocks */
+
+.explain {
+  margin-top: 8px;
+  padding: 12px;
+  background: rgba(0,0,0,0.03);
+  border: 1px solid var(--card-border);
+  border-radius: 6px;
+  display: none;
+  font-size: 0.9rem;
+}
+
+.explain.visible {
+  display: block;
+}
+
+/* Mini-inline “?” bubbles */
+
+.help-bubble {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  text-align: center;
+  border-radius: 50%;
+  border: 1px solid var(--card-border);
+  cursor: pointer;
+  font-size: 12px;
+  margin-left: 6px;
+}
+
+
+/* PDF Export loading */
+
+#pdf-loading {
+  display: none;
+  margin-top: 15px;
+  color: var(--accent);
+}
