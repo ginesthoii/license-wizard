@@ -1,0 +1,22 @@
+body.theme-vercel {
+  --bg: #0e0e0f;
+  --text: #eee;
+  --card-bg: rgba(255,255,255,0.05);
+  --card-border: rgba(255,255,255,0.12);
+  --accent: #ffffff;
+  --accent-hover: #cccccc;
+  --sidebar-bg: #111111;
+  --sidebar-border: rgba(255,255,255,0.1);
+}
+
+body.theme-vercel {
+  font-family: Inter, system-ui, sans-serif;
+}
+
+#sidebar li:hover {
+  background: rgba(255,255,255,0.08);
+}
+
+.card {
+  backdrop-filter: blur(6px);
+}
