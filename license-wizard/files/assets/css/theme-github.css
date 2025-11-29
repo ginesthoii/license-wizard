@@ -1,0 +1,14 @@
+body.theme-github {
+  --bg: #f6f8fa;
+  --text: #1f2328;
+  --card-bg: #ffffff;
+  --card-border: #d0d7de;
+  --accent: #2c74d8;
+  --accent-hover: #1d4f94;
+  --sidebar-bg: #ffffff;
+  --sidebar-border: #d0d7de;
+}
+
+body.theme-github button {
+  border: 1px solid transparent;
+}
