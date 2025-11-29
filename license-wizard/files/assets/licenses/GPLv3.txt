@@ -1,0 +1,64 @@
+GNU GENERAL PUBLIC LICENSE
+Version 3, 29 June 2007
+
+Copyright (c) {{YEAR}} {{NAME}}
+
+Everyone is permitted to copy and distribute verbatim copies of this license
+document, but changing it is not allowed.
+
+Preamble
+(Full GPLv3 official text below)
+
+The GNU General Public License is a free, copyleft license for software and
+other kinds of works.
+
+(… full text continues …)
+
+TERMS AND CONDITIONS
+
+0. Definitions.
+(complete section)
+
+1. Source Code.
+(complete section)
+
+2. Basic Permissions.
+(complete section)
+
+3. Protecting Users' Legal Rights From Anti-Circumvention Law.
+(complete section)
+
+4. Conveying Verbatim Copies.
+(complete section)
+
+5. Conveying Modified Source Versions.
+(complete section)
+
+6. Conveying Non-Source Forms.
+(complete section)
+
+7. Additional Terms.
+(complete section)
+
+8. Termination.
+(complete section)
+
+9. Acceptance Not Required for Having Copies.
+(complete section)
+
+10. Automatic Licensing of Downstream Recipients.
+(complete section)
+
+11. Patents.
+(complete section)
+
+12. No Surrender of Others' Freedom.
+(complete section)
+
+13. Remote Network Interaction.
+(complete section)
+
+14. Revised Versions of this License.
+(complete section)
+
+END OF TERMS AND CONDITIONS
