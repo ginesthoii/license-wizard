@@ -1,0 +1,24 @@
+Mozilla Public License Version 2.0
+
+1. Definitions
+(full MPL 2.0 text)
+
+2. License Grants and Conditions
+(full)
+
+3. Responsibilities
+(full)
+
+4. Termination
+(full)
+
+5. Disclaimer of Warranty
+(full)
+
+6. Limitation of Liability
+(full)
+
+7. Litigation
+(full)
+
+END OF TERMS AND CONDITIONS
