@@ -1,0 +1,16 @@
+GNU AFFERO GENERAL PUBLIC LICENSE
+Version 3, 19 November 2007
+
+Copyright (c) {{YEAR}} {{NAME}}
+
+Preamble
+(Full AGPLv3 official text)
+
+The GNU AGPL is identical to GPLv3 with an additional requirement:
+If you modify the Program and run it on a server to interact remotely
+through a computer network, you must also provide users access to
+the source code corresponding to the modified version.
+
+(… full text continues …)
+
+END OF TERMS AND CONDITIONS
