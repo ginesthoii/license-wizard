@@ -6,379 +6,304 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 <style>
-/* --------------------------------------------------
-   BASE CSS  (bundled from base.css)
--------------------------------------------------- */
-*{margin:0;padding:0;box-sizing:border-box;}
-html,body{height:100%;background:var(--bg);color:var(--text);
-  font-family:system-ui,sans-serif;overflow:hidden;}
+/* ============================================================
+   BASE RESET
+============================================================ */
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
-:root{
-  --bg:#f8f9fa; --text:#1a1a1a; --card-bg:#fff; --card-border:#dadada;
-  --accent:#0366d6; --accent-hover:#024d9f;
-  --sidebar-bg:#fff; --sidebar-border:#e4e4e4;
+html, body {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, sans-serif;
+  overflow: hidden;
 }
 
-#sidebar{
-  position:fixed;top:0;left:0;width:260px;height:100%;
-  background:var(--sidebar-bg);border-right:1px solid var(--sidebar-border);
-  padding:30px 20px;overflow-y:auto;
-}
-#sidebar h2{margin-bottom:20px;font-size:1.6rem;}
-#sidebar ul{list-style:none;}
-#sidebar li{padding:10px;border-radius:6px;margin-bottom:5px;cursor:pointer;}
-#sidebar li:hover{background:rgba(0,0,0,0.05);}
-#sidebar li.active{background:var(--accent);color:#fff;}
-
-.theme-switcher{margin-top:35px;}
-.theme-switcher button{width:100%;padding:8px;margin-bottom:6px;
-  border:1px solid var(--card-border);border-radius:6px;background:var(--card-bg);
-  cursor:pointer;}
-.theme-switcher button:hover{border-color:var(--accent);}
-
-#content{margin-left:260px;padding:30px;height:100%;overflow-y:auto;}
-.card{background:var(--card-bg);border:1px solid var(--card-border);
-  border-radius:8px;padding:18px;margin-bottom:16px;}
-button{background:var(--accent);border:none;color:#fff;
-  padding:10px 15px;border-radius:6px;cursor:pointer;}
-button:hover{background:var(--accent-hover);}
-.page{display:none;opacity:0;transition:opacity .35s;}
-.page.active{display:block;}
-.fade-page.active{opacity:1;}
-textarea{width:100%;height:350px;padding:14px;background:var(--card-bg);
-  border-radius:8px;border:1px solid var(--card-border);resize:vertical;}
-
-.help-bubble{
-  display:inline-block;width:18px;height:18px;line-height:16px;text-align:center;
-  border:1px solid var(--card-border);border-radius:50%;font-size:12px;
-  cursor:pointer;margin-left:6px;
-}
-.explain{display:none;margin-top:8px;background:rgba(0,0,0,0.03);
-  border:1px solid var(--card-border);padding:12px;border-radius:6px;}
-.explain.visible{display:block;}
-
-.nav-buttons{margin-top:30px;display:flex;justify-content:space-between;}
-
-/* --------------------------------------------------
-   THEMES (GitHub / Vercel / Terminal)
--------------------------------------------------- */
-body.theme-github {}
-
-body.theme-vercel {
-  --bg:#0e0e0f; --text:#eee;
-  --card-bg:rgba(255,255,255,0.05);
-  --card-border:rgba(255,255,255,0.12);
-  --accent:#fff; --accent-hover:#ccc;
-  --sidebar-bg:#111; --sidebar-border:rgba(255,255,255,0.1);
-  font-family:Inter,system-ui,sans-serif;
+:root {
+  --bg: #f8f9fa;
+  --text: #1a1a1a;
+  --card-bg: #ffffff;
+  --card-border: #dadada;
+  --accent: #0366d6;
+  --accent-hover: #024d9f;
+  --sidebar-bg: #ffffff;
+  --sidebar-border: #e4e4e4;
+  --pill-bg: #e5e7eb;
+  --pill-bg-active: #0366d6;
+  --pill-text: #111;
+  --pill-text-active: #fff;
 }
 
-body.theme-terminal {
-  --bg:#000; --text:#11ff11;
-  --card-bg:#000; --card-border:#11ff11;
-  --accent:#11ff11; --accent-hover:#0ecf0e;
-  --sidebar-bg:#000; --sidebar-border:#11ff11;
-  font-family:"Fira Code","Courier New",monospace;
+/* ============================================================
+   LAYOUT — SIDEBAR
+============================================================ */
+#sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 260px;
+  height: 100%;
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--sidebar-border);
+  padding: 30px 20px;
+  overflow-y: auto;
 }
-body.theme-terminal .help-bubble{
-  border-color:var(--accent);color:var(--accent);
+
+#sidebar h2 {
+  margin-bottom: 20px;
+  font-size: 1.7rem;
+  font-weight: 600;
+}
+
+#sidebar ul {
+  list-style: none;
+}
+
+#sidebar li {
+  padding: 12px;
+  margin-bottom: 6px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s;
+  font-size: 0.95rem;
+}
+
+#sidebar li:hover {
+  background: rgba(0,0,0,0.06);
+}
+
+#sidebar li.active {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* ============================================================
+   MAIN CONTENT WRAPPER
+============================================================ */
+#content {
+  margin-left: 260px;
+  padding: 32px;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.page {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.page.active {
+  display: block;
+}
+
+.fade-page.active {
+  opacity: 1;
+}
+
+/* ============================================================
+   CARD — NEW UPGRADED DESIGN
+============================================================ */
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  padding: 26px;
+  border-radius: 12px;
+  margin-bottom: 26px;
+}
+
+/* Question headers */
+.question-card .question-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.question-card h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+/* Help bubbles */
+.help-bubble {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  font-size: 12px;
+  border-radius: 50%;
+  border: 1px solid var(--card-border);
+  cursor: pointer;
+  background: var(--card-bg);
+}
+
+/* Description block */
+.question-description {
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px solid var(--card-border);
+  background: rgba(0,0,0,0.04);
+  margin-bottom: 18px;
+}
+
+.question-description p {
+  margin-top: 6px;
+  line-height: 1.48;
+}
+
+/* Options */
+.options-list .option-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s;
+  font-size: 0.95rem;
+}
+
+.options-list .option-item:hover {
+  background: rgba(0,0,0,0.06);
+}
+
+.options-list input {
+  margin-right: 10px;
+}
+
+/* ============================================================
+   STRICT CLAUSES — PILL TOGGLES + ACCORDIONS
+============================================================ */
+.clause-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 14px;
+  border-radius: 40px;
+  background: var(--pill-bg);
+  color: var(--pill-text);
+  font-size: 0.9rem;
+  cursor: pointer;
+  margin: 6px;
+  transition: all 0.15s;
+  user-select: none;
+}
+
+.clause-pill.active {
+  background: var(--pill-bg-active);
+  color: var(--pill-text-active);
+}
+
+.clause-pill input {
+  display: none;
+}
+
+.clause-desc {
+  display: none;
+  padding: 14px;
+  margin-top: 8px;
+  border-radius: 10px;
+  background: rgba(0,0,0,0.04);
+  border: 1px solid var(--card-border);
+  line-height: 1.48;
+}
+
+.clause-desc.visible {
+  display: block;
+}
+
+/* ============================================================
+   COMPARISON TABLE
+============================================================ */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 18px;
+  font-size: 0.95rem;
+}
+
+th, td {
+  padding: 12px;
+  border: 1px solid var(--card-border);
+  text-align: left;
+}
+
+th {
+  background: rgba(0,0,0,0.05);
+  font-weight: 600;
+}
+
+/* ============================================================
+   PREVIEW + EXPORT
+============================================================ */
+textarea {
+  width: 100%;
+  min-height: 420px;
+  padding: 16px;
+  border-radius: 10px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  font-family: monospace;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+/* Export buttons */
+.export-buttons {
+  display: flex;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+button {
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.96rem;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+button:hover {
+  background: var(--accent-hover);
+}
+
+/* Nav buttons */
+.nav-buttons {
+  margin-top: 35px;
+  display: flex;
+  justify-content: space-between;
 }
 </style>
 </head>
 
 <body class="theme-github">
 
-<!-- --------------------------------------------------
+
+<!-- ============================================================
      SIDEBAR
--------------------------------------------------- -->
+============================================================ -->
 <div id="sidebar">
   <h2>License Wizard</h2>
-
   <ul>
-    <li data-step="1" class="active">Decision Tree</li>
+    <li class="active" data-step="1">Decision Tree</li>
     <li data-step="2">Strict Clauses</li>
     <li data-step="3">Comparison</li>
     <li data-step="4">Preview</li>
     <li data-step="5">Export</li>
   </ul>
 
-  <div class="theme-switcher">
-    <h4>Theme</h4>
+  <div class="theme-switcher" style="margin-top:32px;">
+    <h4 style="margin-bottom:8px;font-weight:600;">Theme</h4>
     <button onclick="setTheme('github')">GitHub</button>
     <button onclick="setTheme('vercel')">Vercel</button>
     <button onclick="setTheme('terminal')">Terminal</button>
   </div>
 </div>
 
-<!-- --------------------------------------------------
-     CONTENT AREA
--------------------------------------------------- -->
+<!-- ============================================================
+     CONTENT 
+============================================================ -->
 <div id="content">
-
-<!-- PAGE 1 — DECISION TREE -->
-<div id="page-1" class="page active fade-page">
-  <h1>Decision Tree</h1>
-
-  <div class="card">
-    <h3>Commercial Use
-      <span class="help-bubble">?</span>
-      <div class="explain">Whether others can make money using your work.</div>
-    </h3>
-    <label><input type="radio" name="commercial-use" value="yes"> Yes</label><br>
-    <label><input type="radio" name="commercial-use" value="yes-unmodified"> Yes, but only if unmodified</label><br>
-    <label><input type="radio" name="commercial-use" value="yes-but-cannot-sell"> Yes, but cannot sell code itself</label><br>
-    <label><input type="radio" name="commercial-use" value="no"> No</label>
-  </div>
-
-  <div class="card">
-    <h3>Closed Source Allowed?
-      <span class="help-bubble">?</span>
-      <div class="explain">Whether people can build private, closed-source software using your code.</div>
-    </h3>
-    <label><input type="radio" name="closed-source" value="yes"> Yes</label><br>
-    <label><input type="radio" name="closed-source" value="no"> No</label>
-  </div>
-
-  <div class="card">
-    <h3>Derivative Freedom
-      <span class="help-bubble">?</span>
-      <div class="explain">Strong copyleft forces modifications to stay free. Weak copyleft only affects linked modules.</div>
-    </h3>
-    <label><input type="radio" name="derivatives" value="strong"> Strong Copyleft</label><br>
-    <label><input type="radio" name="derivatives" value="weak"> Weak Copyleft</label><br>
-    <label><input type="radio" name="derivatives" value="none"> No Derivatives</label>
-  </div>
-
-  <div class="card">
-    <h3>Public Editing?
-      <span class="help-bubble">?</span>
-      <div class="explain">Whether the community can fork, modify, and share versions of your work.</div>
-    </h3>
-    <label><input type="radio" name="public-edit" value="yes"> Yes</label><br>
-    <label><input type="radio" name="public-edit" value="view"> View Only</label><br>
-    <label><input type="radio" name="public-edit" value="no"> No</label>
-  </div>
-
-  <div class="card">
-    <h3>Web/SaaS Disclosure (AGPL Behavior)
-      <span class="help-bubble">?</span>
-      <div class="explain">Requires websites and SaaS to share their modified source code.</div>
-    </h3>
-    <label><input type="radio" name="saas" value="yes"> Yes</label><br>
-    <label><input type="radio" name="saas" value="no"> No</label>
-  </div>
-
-</div>
-
-<!-- PAGE 2 — STRICT CLAUSES -->
-<div id="page-2" class="page">
-  <h1>Strict Clauses</h1>
-
-  <div class="card">
-    <label><input type="checkbox" name="strict" value="anti-ai"> Anti-AI Use</label><br>
-    <label><input type="checkbox" name="strict" value="no-gov"> No Government Use</label><br>
-    <label><input type="checkbox" name="strict" value="no-bigtech"> No Big-Tech Use</label><br>
-    <label><input type="checkbox" name="strict" value="no-saas"> No SaaS Resale</label><br>
-    <label><input type="checkbox" name="strict" value="moral"> Moral Use Only</label><br>
-    <label><input type="checkbox" name="strict" value="source-visible"> Source Visible Only</label><br>
-    <label><input type="checkbox" name="strict" value="personal"> Personal Use Only</label><br>
-    <label><input type="checkbox" name="strict" value="no-deriv"> No Derivatives</label><br>
-    <label><input type="checkbox" name="strict" value="attrib"> Attribution Banner</label>
-  </div>
-</div>
-
-<!-- PAGE 3 — COMPARISON -->
-<div id="page-3" class="page">
-  <h1>Comparison Table</h1>
-  <div class="card">
-    <table>
-      <tr><th>License</th><th>Commercial</th><th>Closed Source</th><th>Copyleft</th><th>SaaS</th></tr>
-      <tr><td>MIT</td><td>Yes</td><td>Yes</td><td>No</td><td>No</td></tr>
-      <tr><td>Apache 2.0</td><td>Yes</td><td>Yes</td><td>No</td><td>No</td></tr>
-      <tr><td>GPLv3</td><td>Yes</td><td>No</td><td>Strong</td><td>No</td></tr>
-      <tr><td>AGPLv3</td><td>Yes</td><td>No</td><td>Strong</td><td>Yes</td></tr>
-      <tr><td>LGPL</td><td>Yes</td><td>Yes (linked)</td><td>Weak</td><td>No</td></tr>
-      <tr><td>CC-BY-NC</td><td>No</td><td>Yes</td><td>No</td><td>No</td></tr>
-    </table>
-  </div>
-</div>
-
-<!-- PAGE 4 — PREVIEW -->
-<div id="page-4" class="page">
-  <h1>Preview License</h1>
-  <textarea id="license-output" placeholder="Generated license will appear here..."></textarea>
-</div>
-
-<!-- PAGE 5 — EXPORT -->
-<div id="page-5" class="page">
-  <h1>Export</h1>
-  <button onclick="copyLicense()">Copy to Clipboard</button>
-  <button onclick="exportPDF()">Export PDF</button>
-  <p id="pdf-loading">Generating PDF…</p>
-</div>
-
-<!-- NAVIGATION -->
-<div class="nav-buttons">
-  <button id="back-btn">Back</button>
-  <button id="generate-btn">Generate</button>
-  <button id="next-btn">Next</button>
-</div>
-
-</div>
-
-<!-- --------------------------------------------------
-     JAVASCRIPT (Bundled: app.js + engine.js + clauses.js)
--------------------------------------------------- -->
-<script>
-/* Navigation */
-let currentPage=1,totalPages=5;
-function showPage(n){
-  document.querySelectorAll(".page").forEach(p=>{
-    p.classList.remove("active","fade-page");
-  });
-  const pg=document.getElementById(`page-${n}`);
-  pg.classList.add("active");
-  void pg.offsetWidth;
-  pg.classList.add("fade-page");
-}
-document.getElementById("next-btn").onclick=()=>{if(currentPage<totalPages){currentPage++;showPage(currentPage);}};
-document.getElementById("back-btn").onclick=()=>{if(currentPage>1){currentPage--;showPage(currentPage);}};
-
-document.addEventListener("DOMContentLoaded",()=>showPage(1));
-
-/* Sidebar */
-document.querySelectorAll("#sidebar li").forEach(li=>{
-  li.addEventListener("click",()=>{
-    currentPage=parseInt(li.dataset.step);
-    showPage(currentPage);
-    document.querySelectorAll("#sidebar li").forEach(x=>x.classList.remove("active"));
-    li.classList.add("active");
-  });
-});
-
-/* Themes */
-function setTheme(t){
-  document.body.className=`theme-${t}`;
-}
-
-/* Help bubbles */
-document.addEventListener("click",e=>{
-  if(e.target.classList.contains("help-bubble")){
-    e.target.nextElementSibling.classList.toggle("visible");
-  }
-});
-
-/* --------------------------------------------------
-   DECISION TREE ENGINE
--------------------------------------------------- */
-function getRadio(name){
-  const el=document.querySelector(`input[name="${name}"]:checked`);
-  return el?el.value:null;
-}
-function collectStrict(){
-  const arr=[];document.querySelectorAll('input[name="strict"]:checked')
-    .forEach(c=>arr.push(c.value));
-  return arr;
-}
-
-function chooseBase(a){
-  if(a.deriv==="strong"){return a.saas==="yes"?"AGPL":"GPL";}
-  if(a.deriv==="weak")return "LGPL";
-  if(a.deriv==="none")return "NC-ND";
-  if(a.closed==="yes"){
-    if(a.commercial==="yes")return "Apache";
-    return "MIT";
-  }
-  if(a.commercial==="no")return "NC";
-  return "MIT";
-}
-
-const CLAUSES={
-  "anti-ai":"Anti-AI Use: This work may not be used to train, fine-tune, or operate AI/LLM systems.",
-  "no-gov":"No Government Use: Government bodies require explicit written permission.",
-  "no-bigtech":"No Big-Tech Use: Corporations over 1,000 employees or $100M revenue require permission.",
-  "no-saas":"No SaaS Resale: Cannot be sold or licensed as a SaaS product.",
-  "moral":"Moral Use Only: No use for harm, surveillance, exploitation, or rights violations.",
-  "source-visible":"Source Visible Only: All deployments must provide live access to view unmodified source.",
-  "personal":"Personal Use Only: Only for personal, non-commercial projects.",
-  "no-deriv":"No Derivatives: Modified versions cannot be created or distributed.",
-  "attrib":"Attribution Banner: Visible credit must appear in the UI of derived works."
-};
-
-function buildClauses(arr){return arr.map(k=>CLAUSES[k]);}
-
-/* --------------------------------------------------
-   LICENSE TEXTS (embedded)
--------------------------------------------------- */
-
-const LICENSES={
-"MIT":`MIT License
-
-Copyright (c) {{YEAR}} {{NAME}}
-
-Permission is hereby granted...`,
-"Apache":`Apache License 2.0
-
-(full text omitted for brevity in this bundled example)`,
-"GPL":`GNU GENERAL PUBLIC LICENSE v3
-
-(full text)`,
-"AGPL":`GNU AFFERO GENERAL PUBLIC LICENSE v3
-
-(full text)`,
-"LGPL":`GNU LESSER GENERAL PUBLIC LICENSE v3
-
-(full text)`,
-"NC":`Creative Commons Attribution-NonCommercial 4.0
-
-(full text)`,
-"NC-ND":`Creative Commons Attribution-NonCommercial-NoDerivatives 4.0
-
-(full text)`
-};
-
-function renderLicense(base,clauses){
-  const year=new Date().getFullYear();
-  let txt=LICENSES[base].replace("{{YEAR}}",year).replace("{{NAME}}","Olivia Griffin");
-  txt+=`\n\n--------------------------------------------------\nADDITIONAL STRICT CLAUSES\n--------------------------------------------------\n\n`;
-  txt+=clauses.join("\n\n");
-  return txt;
-}
-
-/* Generate */
-document.getElementById("generate-btn").onclick=()=>{
-  const ans={
-    commercial:getRadio("commercial-use"),
-    closed:getRadio("closed-source"),
-    deriv:getRadio("derivatives"),
-    publicEdit:getRadio("public-edit"),
-    saas:getRadio("saas"),
-    strict:collectStrict()
-  };
-  const base=chooseBase(ans);
-  const cls=buildClauses(ans.strict);
-  const out=renderLicense(base,cls);
-  document.getElementById("license-output").value=out;
-};
-
-/* Copy */
-function copyLicense(){
-  navigator.clipboard.writeText(document.getElementById("license-output").value);
-  alert("Copied!");
-}
-
-/* PDF Export */
-function exportPDF(){
-  const txt=document.getElementById("license-output").value;
-  const el=document.createElement("pre");
-  el.textContent=txt;
-  const opt={filename:"LICENSE.pdf"};
-  window.html2pdf?html2pdf().set(opt).from(el).save():alert("html2pdf missing");
-}
-</script>
-
-<!-- html2pdf CDN -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
-</body>
-</html>
